@@ -29,8 +29,14 @@ def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask'):
     expected_num_imgs = len(origin_paths)
     for origin_path in tqdm(origin_paths):
         old_parent = Path(origin_dir).parts[-1]
+
         cleaned_path = utils.make_dstpath(origin_path, old_parent, cleaned_dir) 
-        mask_path  = utils.make_dstpath(origin_path, old_parent, mask_dir) 
+        mask_path = utils.make_dstpath(origin_path, old_parent, mask_dir) 
+        cleaned_path = os.path.splitext(cleaned_path)[0] + '.png'
+        mask_path = os.path.splitext(mask_path)[0] + '.png'
+
+        if os.path.exists(cleaned_path):
+            continue
 
         #print(origin_path,'|',cleaned_path,'|',mask_path)
         img = cv2.imread(origin_path)
@@ -46,10 +52,8 @@ def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask'):
             #shrink = cv2.resize(img, None, fx=0.7, fy=0.7, interpolation=cv2.INTER_AREA)
             #cv2.imshow('process', shrink)
             #cv2.waitKey(0)
-        cleaned_name,_ = os.path.splitext(cleaned_path)
-        mask_name,_ = os.path.splitext(mask_path)
-        cv2.imwrite(cleaned_name + '.png',img)
-        cv2.imwrite(mask_name + '.png', mask)
+        cv2.imwrite(cleaned_path, img)
+        cv2.imwrite(mask_path, mask)
 
 if __name__ == '__main__':
     main(*sys.argv[1:])
