@@ -54,7 +54,7 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
 def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask'):
     ignores = ['*.db','*.gif','*.jpg', '*.jpeg', '*.png']
     utils.safe_copytree(origin_dir, cleaned_dir, ignores)
-    utils.safe_copytree(origin_dir, mask_dir, ignores)
+    #utils.safe_copytree(origin_dir, mask_dir, ignores)
     textFinder = ballTextMasker.BalloonCleaner()
 
     origin_paths = utils.file_paths(origin_dir)
@@ -64,6 +64,7 @@ def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask'):
                                              origin_path=origin_path,
                                              textFinder=textFinder),
                     origin_paths))
+    print('start parallel processing!')
 
     utils.parallel_process(jobs, make_and_save, use_kwargs=True)
     '''
