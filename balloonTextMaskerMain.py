@@ -33,7 +33,7 @@ def main(origin_dir, cleaned_dir, mask_dir):
         img = cv2.imread(origin_path)
         if img is None:
             continue
-        cv2.imshow('img',img); cv2.waitKey(0)
+        #cv2.imshow('img',img); cv2.waitKey(0)
 
         mask = np.zeros(img.shape,np.uint8)
         data = bubbleFinder.bubbleFinder(img)
