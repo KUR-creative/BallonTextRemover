@@ -16,7 +16,6 @@ import bubbleFinder  # github.com/sKHJ/speechBubbleFinder
 import ballTextMasker
 from pathlib import Path
 import utils
-from tqdm import tqdm
 
 def make_and_save(origin_dir, cleaned_dir, mask_dir,
                   origin_path, textFinder, save_mask=False):
@@ -58,11 +57,22 @@ def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask'):
     utils.safe_copytree(origin_dir, mask_dir, ignores)
     textFinder = ballTextMasker.BalloonCleaner()
 
+    origin_paths = utils.file_paths(origin_dir)
+    jobs = list(map(lambda origin_path: dict(origin_dir=origin_dir,
+                                             cleaned_dir=cleaned_dir,
+                                             mask_dir=mask_dir,
+                                             origin_path=origin_path,
+                                             textFinder=textFinder),
+                    origin_paths))
+
+    utils.parallel_process(jobs, make_and_save, use_kwargs=True)
+    '''
     origin_paths = list(utils.file_paths(origin_dir))
     expected_num_imgs = len(origin_paths)
     for origin_path in tqdm(origin_paths):
         make_and_save(origin_dir, cleaned_dir, mask_dir,
                       origin_path, textFinder)
+    '''
 
 if __name__ == '__main__':
     main(*sys.argv[1:])
