@@ -40,7 +40,11 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
     if not data:
         return
     for [x, y, w, h] in data:
-        mask[y:y + h, x:x + w], img[y:y + h, x:x + w] = textFinder.cleanBalloon(img[y:y+h, x:x+w])
+        mask_img = textFinder.cleanBalloon(img[y:y+h, x:x+w])
+        if mask_img is None:
+            continue
+        else:
+            mask[y:y + h, x:x + w], img[y:y + h, x:x + w] = mask_img
         #cv2.rectangle(img, (x, y), (x + w, y + h), (30, 0, 255), 3)
         #shrink = cv2.resize(img, None, fx=0.7, fy=0.7, interpolation=cv2.INTER_AREA)
         #cv2.imshow('process', shrink)

@@ -93,6 +93,7 @@ class BalloonCleaner:
 
         if len(contours) == 0:
             print("none!")
+            return None
 
         for i in range(len(contours)):
             cnt=contours[i]
@@ -114,6 +115,7 @@ class BalloonCleaner:
 
 
         cnts,contours,hierarchy  = cv2.findContours(laplacian, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        #print('wtf:',cnts,contours,hierarchy)
 
         area = img_h*img_w
         n = 0
