@@ -19,8 +19,8 @@ import utils
 
 
 def main(origin_dir, cleaned_dir, mask_dir):
-    utils.safe_copytree(origin_dir, cleaned_dir, ['*.jpg', '*.jpeg', '*.png'])
-    utils.safe_copytree(origin_dir, mask_dir, ['*.jpg', '*.jpeg', '*.png'])
+    utils.safe_copytree(origin_dir, cleaned_dir, ['*.db','*.gif','*.jpg', '*.jpeg', '*.png'])
+    utils.safe_copytree(origin_dir, mask_dir, ['*.db','*.gif','*.jpg', '*.jpeg', '*.png'])
     textFinder = ballTextMasker.BalloonCleaner()
 
     for origin_path in utils.file_paths(origin_dir):
