@@ -42,8 +42,9 @@ def safe_copytree(srcpath, dstpath, ignores):
 def safe_mkdir(directory_path):
     try:
         os.mkdir(directory_path)
-    except:
-        pass
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
 
 def file_paths(root_dir_path):
     ''' generate file_paths of directory_path ''' 
