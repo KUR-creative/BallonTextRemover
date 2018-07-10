@@ -52,4 +52,4 @@ def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask'):
         cv2.imwrite(mask_name + '.png', mask)
 
 if __name__ == '__main__':
-    main(sys.argv[1], 'cleaned', 'mask')
+    main(*sys.argv[1:])
