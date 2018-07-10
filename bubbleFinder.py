@@ -55,6 +55,7 @@ def bubbleChecker(img, x, y, w, h):
 
 
 def bubbleFinder(image):
+    #cv2.imshow('wtf?', image); cv2.waitKey(0)
     # load the image, convert it to grayscale, and blur it
     # image = cv2.imread(imageName)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -105,6 +106,8 @@ def bubbleFinder(image):
     # right
     cnts = cv2.findContours(mask.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+    if not cnts:
+        return None
     cnts = contours.sort_contours(cnts)[0]
 
     data = []

@@ -26,17 +26,19 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
     ## mask_path = utils.make_dstpath(origin_path, old_parent, mask_dir) 
     ## mask_path = os.path.splitext(mask_path)[0] + '.png'
 
-    if os.path.exists(cleaned_path):
+    if os.path.exists(cleaned_path): 
         return
 
-    #print(origin_path,'|',cleaned_path,'|',mask_path)
     img = cv2.imread(origin_path)
-    if img is None:
+    if img is None: 
         return
+    #print(origin_path,'|',cleaned_path,'|',mask_path)
     #cv2.imshow('img',img); cv2.waitKey(0)
 
     mask = np.zeros(img.shape,np.uint8)
     data = bubbleFinder.bubbleFinder(img)
+    if not data:
+        return
     for [x, y, w, h] in data:
         mask[y:y + h, x:x + w], img[y:y + h, x:x + w] = textFinder.cleanBalloon(img[y:y+h, x:x+w])
         #cv2.rectangle(img, (x, y), (x + w, y + h), (30, 0, 255), 3)
