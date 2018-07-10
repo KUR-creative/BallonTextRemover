@@ -43,9 +43,10 @@ def main(origin_dir, cleaned_dir, mask_dir):
             #shrink = cv2.resize(img, None, fx=0.7, fy=0.7, interpolation=cv2.INTER_AREA)
             #cv2.imshow('process', shrink)
             #cv2.waitKey(0)
-        cv2.imwrite(cleaned_path,img)
-        cv2.imwrite(mask_path, mask)
-        '''
+        cleaned_name,_ = os.path.splitext(cleaned_path)
+        mask_name,_ = os.path.splitext(mask_path)
+        cv2.imwrite(cleaned_name + '.png',img)
+        cv2.imwrite(mask_name + '.png', mask)
 
 if __name__ == '__main__':
     main(sys.argv[1], 'cleaned', 'mask')
