@@ -27,8 +27,10 @@ def main(origin_dir, cleaned_dir, mask_dir):
         old_parent = Path(origin_dir).parts[-1]
         cleaned_path = utils.make_dstpath(origin_path, old_parent, cleaned_dir) 
         mask_path  = utils.make_dstpath(origin_path, old_parent, mask_dir) 
-        print(origin_path,cleaned_path,mask_path)
+        print(origin_path,'|',cleaned_path,'|',mask_path)
         img = cv2.imread(origin_path)
+        if img is None:
+            continue
         cv2.imshow('img',img); cv2.waitKey(0)
         '''
         mask = np.zeros(img.shape,np.uint8)
