@@ -1,3 +1,6 @@
 *.db
 *.pyc
 *.swp
+*.png
+*.jpg
+*.jpeg
