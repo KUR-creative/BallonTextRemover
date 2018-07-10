@@ -31,9 +31,9 @@ def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask'):
         old_parent = Path(origin_dir).parts[-1]
 
         cleaned_path = utils.make_dstpath(origin_path, old_parent, cleaned_dir) 
-        mask_path = utils.make_dstpath(origin_path, old_parent, mask_dir) 
+        ## mask_path = utils.make_dstpath(origin_path, old_parent, mask_dir) 
         cleaned_path = os.path.splitext(cleaned_path)[0] + '.png'
-        mask_path = os.path.splitext(mask_path)[0] + '.png'
+        ## mask_path = os.path.splitext(mask_path)[0] + '.png'
 
         if os.path.exists(cleaned_path):
             continue
@@ -53,7 +53,7 @@ def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask'):
             #cv2.imshow('process', shrink)
             #cv2.waitKey(0)
         cv2.imwrite(cleaned_path, img)
-        cv2.imwrite(mask_path, mask)
+        ## cv2.imwrite(mask_path, mask)
 
 if __name__ == '__main__':
     main(*sys.argv[1:])
