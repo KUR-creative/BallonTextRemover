@@ -21,7 +21,7 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
                   origin_path, textFinder, save_mask=False):
     old_parent = Path(origin_dir).parts[-1]
     cleaned_path = utils.make_dstpath(origin_path, old_parent, cleaned_dir) 
-    cleaned_path = os.path.splitext(cleaned_path)[0] + '.png'
+    cleaned_path = os.path.splitext(cleaned_path)[0] + '.jpg'
     ## mask_path = utils.make_dstpath(origin_path, old_parent, mask_dir) 
     ## mask_path = os.path.splitext(mask_path)[0] + '.png'
 
