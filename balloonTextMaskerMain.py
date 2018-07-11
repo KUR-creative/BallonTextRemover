@@ -17,6 +17,8 @@ import ballTextMasker
 from pathlib import Path
 import utils
 
+from line_profiler import LineProfiler
+
 def make_and_save(origin_dir, cleaned_dir, mask_dir,
                   origin_path, textFinder, save_mask=False):
     old_parent = Path(origin_dir).parts[-1]
@@ -24,7 +26,7 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
     cleaned_path = os.path.splitext(cleaned_path)[0] + '.jpg'
     if save_mask:
         mask_path = utils.make_dstpath(origin_path, old_parent, mask_dir) 
-        mask_path = os.path.splitext(mask_path)[0] + '.png'
+        mask_path = os.path.splitext(mask_path)[0] + '.jpg'
 
     if os.path.exists(cleaned_path): 
         return
@@ -35,8 +37,13 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
     #print(origin_path,'|',cleaned_path,'|',mask_path)
     #cv2.imshow('img',img); cv2.waitKey(0)
 
+    lp = LineProfiler()
+    lp_wrapper = lp(bubbleFinder.bubbleFinder)
+
     mask = np.zeros(img.shape,np.uint8)
-    data = bubbleFinder.bubbleFinder(img)
+    #data = bubbleFinder.bubbleFinder(img)
+    data = lp_wrapper(img)
+    lp.print_stats()
     if not data:
         return
     for [x, y, w, h] in data:
@@ -54,14 +61,15 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
         cv2.imwrite(mask_path, mask)
 
 def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask', save_mask=False):
-    ignores = ['*.db','*.gif','*.jpg', '*.jpeg', '*.png']
-    utils.safe_copytree(origin_dir, cleaned_dir, ignores)
-    #utils.safe_copytree(origin_dir, mask_dir, ignores)
     textFinder = ballTextMasker.BalloonCleaner()
 
+    ignores = ['*.db','*.gif','*.jpg', '*.jpeg', '*.png']
     if save_mask is not False:
         save_mask = True
+        utils.safe_copytree(origin_dir, mask_dir, ignores)
+    utils.safe_copytree(origin_dir, cleaned_dir, ignores)
 
+    '''
     origin_paths = utils.file_paths(origin_dir)
     jobs = list(map(lambda origin_path: dict(origin_dir=origin_dir,
                                              cleaned_dir=cleaned_dir,
@@ -74,12 +82,11 @@ def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask', save_mask=False):
 
     utils.parallel_process(jobs, make_and_save, use_kwargs=True)
     '''
+    from tqdm import tqdm
     origin_paths = list(utils.file_paths(origin_dir))
-    expected_num_imgs = len(origin_paths)
     for origin_path in tqdm(origin_paths):
         make_and_save(origin_dir, cleaned_dir, mask_dir,
-                      origin_path, textFinder)
-    '''
+                      origin_path, textFinder, save_mask)
 
 if __name__ == '__main__':
     main(*sys.argv[1:])
