@@ -22,8 +22,9 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
     old_parent = Path(origin_dir).parts[-1]
     cleaned_path = utils.make_dstpath(origin_path, old_parent, cleaned_dir) 
     cleaned_path = os.path.splitext(cleaned_path)[0] + '.jpg'
-    ## mask_path = utils.make_dstpath(origin_path, old_parent, mask_dir) 
-    ## mask_path = os.path.splitext(mask_path)[0] + '.png'
+    if save_mask:
+        mask_path = utils.make_dstpath(origin_path, old_parent, mask_dir) 
+        mask_path = os.path.splitext(mask_path)[0] + '.png'
 
     if os.path.exists(cleaned_path): 
         return
@@ -49,20 +50,25 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
         #cv2.imshow('process', shrink)
         #cv2.waitKey(0)
     cv2.imwrite(cleaned_path, img)
-    ## cv2.imwrite(mask_path, mask)
+    if save_mask:
+        cv2.imwrite(mask_path, mask)
 
-def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask'):
+def main(origin_dir, cleaned_dir='cleaned', mask_dir='mask', save_mask=False):
     ignores = ['*.db','*.gif','*.jpg', '*.jpeg', '*.png']
     utils.safe_copytree(origin_dir, cleaned_dir, ignores)
     #utils.safe_copytree(origin_dir, mask_dir, ignores)
     textFinder = ballTextMasker.BalloonCleaner()
+
+    if save_mask is not False:
+        save_mask = True
 
     origin_paths = utils.file_paths(origin_dir)
     jobs = list(map(lambda origin_path: dict(origin_dir=origin_dir,
                                              cleaned_dir=cleaned_dir,
                                              mask_dir=mask_dir,
                                              origin_path=origin_path,
-                                             textFinder=textFinder),
+                                             textFinder=textFinder,
+                                             save_mask=save_mask),
                     origin_paths))
     print('start parallel processing!')
 
