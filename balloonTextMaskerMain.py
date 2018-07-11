@@ -17,7 +17,6 @@ import ballTextMasker
 from pathlib import Path
 import utils
 
-from line_profiler import LineProfiler
 
 def make_and_save(origin_dir, cleaned_dir, mask_dir,
                   origin_path, textFinder, save_mask=False):
@@ -37,13 +36,8 @@ def make_and_save(origin_dir, cleaned_dir, mask_dir,
     #print(origin_path,'|',cleaned_path,'|',mask_path)
     #cv2.imshow('img',img); cv2.waitKey(0)
 
-    lp = LineProfiler()
-    lp_wrapper = lp(bubbleFinder.bubbleFinder)
-
     mask = np.zeros(img.shape,np.uint8)
-    #data = bubbleFinder.bubbleFinder(img)
-    data = lp_wrapper(img)
-    lp.print_stats()
+    data = bubbleFinder.bubbleFinder(img)
     if not data:
         return
     for [x, y, w, h] in data:

@@ -5,6 +5,7 @@ import numpy as np
 import imutils
 import cv2
 
+from line_profiler import LineProfiler
 
 def bubbleChecker(img, x, y, w, h):
     # 1. blob size limit-------------------
@@ -54,6 +55,7 @@ def bubbleChecker(img, x, y, w, h):
     return 1
 
 
+@profile
 def bubbleFinder(image):
     #cv2.imshow('wtf?', image); cv2.waitKey(0)
     # load the image, convert it to grayscale, and blur it
